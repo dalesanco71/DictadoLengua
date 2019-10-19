@@ -103,7 +103,7 @@ class ViewController: UIViewController {
         paragraphStyle.lineSpacing = 15
 
         let attributes: [NSAttributedString.Key: Any] = [
-            .font: UIFont.systemFont(ofSize: 20),
+            .font: UIFont.systemFont(ofSize: 18),
             .paragraphStyle: paragraphStyle
         ]
 
