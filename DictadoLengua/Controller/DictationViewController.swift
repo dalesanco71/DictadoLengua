@@ -8,19 +8,43 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class DictationViewController: UIViewController, UITextFieldDelegate {
 
     
-    @IBOutlet weak var dictadoTextView: UITextView!
-    @IBOutlet weak var palabraTextField: UITextField!
-    
+    @IBOutlet var dictadoTextView: UITextView!
+    @IBOutlet var whiteBackground: UIImageView!
+    @IBOutlet var correctedWordTextField: UITextField!
+    @IBOutlet var correctedWordUIView: UIView!
+    @IBOutlet var correctedWordHeightConstraint:  NSLayoutConstraint!
+
     let dictado = "Todas las tardes, a la salida de la escuela, los niños se habían acostumbrado a ir a jugar al jardín del gigante. Era un jardín grande y hermoso, cubierto de verde y suave césped. Dispersas sobre la hierba brillaban bellas flores como estrellas, y había una docena de melocotones que, en primavera, se cubrían de delicados capullos rosados, y en otoño daban sabroso fruto. \n\nLos pájaros se posaban en los árboles y cantaban tan deliciosamente que los niños interrumpían sus juegos para escucharlos."
     
+    var tildeDictation = false
+    var bvDictation = false
+    var llyDictation = false
+    var gjDictation = false
+    var hDictation = false
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        print(tildeDictation)
+        print(bvDictation)
+        
+        whiteBackground.alpha = 0
+        correctedWordUIView.alpha = 0
+        
+        correctedWordTextField.delegate      = self
+
+        // Add notification for keyboard heigth change
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardNotification(notification:)), name: UIResponder.keyboardWillChangeFrameNotification,object:nil)
+        
+        
+        // Add tap gesture to dismiss keyboard when user tap on the view controller (out of the keyboard)
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        view.addGestureRecognizer(tap)
+        
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(tapOnTextView(_:)))
         dictadoTextView.addGestureRecognizer(tapGesture)
         
@@ -35,17 +59,56 @@ class ViewController: UIViewController {
         dictadoTextView.isSelectable = false
         
     }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
 
     // user tapped on textView.
     // Select word tapped and shows it on label
     @objc private final func tapOnTextView(_ tapGesture: UITapGestureRecognizer){
+        
+        whiteBackground.alpha = 0.8
+        correctedWordUIView.alpha = 1
 
-      let point = tapGesture.location(in: dictadoTextView)
-      if let detectedWord = getWordAtPosition(point)
-      {
-        palabraTextField.text = detectedWord
-      }
+        let point = tapGesture.location(in: dictadoTextView)
+        if let detectedWord = getWordAtPosition(point) {
+            correctedWordTextField.text = detectedWord
+        }
     }
+    
+    ///////////////////////////////////////////
+    //MARK:- keyboard Notification
+    
+    @objc func keyboardNotification(notification: NSNotification) {
+        
+        if let userInfo = notification.userInfo {
+            let endFrame = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+            let endFrameY = endFrame!.origin.y
+            let duration:TimeInterval = (userInfo[UIResponder.keyboardAnimationDurationUserInfoKey] as? NSNumber)?.doubleValue ?? 0
+            if endFrameY >= UIScreen.main.bounds.size.height {
+                self.correctedWordHeightConstraint.constant = 50 //heigth of the message view when it's on the bottom side
+
+            } else {
+                self.correctedWordHeightConstraint?.constant = endFrame?.size.height ?? 50
+            }
+            UIView.animate(withDuration: duration,
+                           delay: TimeInterval(0),
+                           options: .curveLinear,
+                           animations: { self.view.layoutIfNeeded() },
+                           completion: nil)
+        }
+    }
+    
+    
+    ////////////////////////////////////////////
+    //MARK:- dismiss keyboard
+    
+    // dismiss keyboard
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
+    }
+    
     
     // gets the word closest to user tapped point
     private func getWordAtPosition(_ point: CGPoint) -> String?{
@@ -111,16 +174,15 @@ class ViewController: UIViewController {
         
     }
     
-    
-    
-    @IBAction func doneBtnPress(_ sender: UIBarButtonItem) {
-        
-        
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        dismissKeyboard()
+        return false
     }
     
-    @IBAction func checkBtnPressed(_ sender: UIBarButtonItem) {
-        
-        
+    @IBAction func okButtonPressed(_ sender: UIButton) {
+        view.endEditing(true)
+
     }
+
 }
 
