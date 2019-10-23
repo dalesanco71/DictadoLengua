@@ -203,17 +203,9 @@
                                 <rect key="frame" x="20" y="149" width="374" height="649"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </imageView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="55W-Yb-vIA" userLabel="Compose View">
-                                <rect key="frame" x="0.0" y="768" width="414" height="50"/>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="55W-Yb-vIA" userLabel="CorrectedWord View">
+                                <rect key="frame" x="0.0" y="846" width="414" height="50"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Your Message" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="chY-fu-hyt">
-                                        <rect key="frame" x="8" y="8" width="332" height="34"/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="34" id="535-Fy-qCW"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <textInputTraits key="textInputTraits" keyboardType="emailAddress" returnKeyType="send"/>
-                                    </textField>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="nR6-ev-A5c">
                                         <rect key="frame" x="360" y="10" width="46" height="30"/>
                                         <constraints>
@@ -221,39 +213,47 @@
                                             <constraint firstAttribute="height" constant="30" id="e9k-R6-Lvf"/>
                                         </constraints>
                                         <state key="normal" title="OK">
-                                            <color key="titleShadowColor" red="0.5" green="0.5" blue="0.5" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <color key="titleShadowColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <action selector="okButtonPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="hvP-ah-tVi"/>
                                         </connections>
                                     </button>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" selected="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter Your Message" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="chY-fu-hyt">
+                                        <rect key="frame" x="8" y="8" width="332" height="34"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="34" id="535-Fy-qCW"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <textInputTraits key="textInputTraits" autocorrectionType="no" spellCheckingType="no" returnKeyType="done" smartInsertDeleteType="no" smartQuotesType="no"/>
+                                    </textField>
                                 </subviews>
                                 <color key="backgroundColor" red="0.33333333329999998" green="0.33333333329999998" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="nR6-ev-A5c" firstAttribute="top" secondItem="55W-Yb-vIA" secondAttribute="top" constant="10" id="3Sa-7j-s0M"/>
+                                    <constraint firstAttribute="trailing" secondItem="nR6-ev-A5c" secondAttribute="trailing" constant="8" id="2Kn-mB-mUJ"/>
                                     <constraint firstItem="nR6-ev-A5c" firstAttribute="leading" secondItem="chY-fu-hyt" secondAttribute="trailing" constant="20" id="F1M-eN-zg0"/>
-                                    <constraint firstAttribute="trailing" secondItem="nR6-ev-A5c" secondAttribute="trailing" constant="8" id="Njx-wt-wUh"/>
-                                    <constraint firstAttribute="height" constant="50" id="URl-kv-Fy3"/>
-                                    <constraint firstItem="chY-fu-hyt" firstAttribute="leading" secondItem="55W-Yb-vIA" secondAttribute="leading" constant="8" id="smf-Mr-yvw"/>
-                                    <constraint firstItem="chY-fu-hyt" firstAttribute="top" secondItem="55W-Yb-vIA" secondAttribute="top" constant="8" id="ymc-vQ-mU3"/>
+                                    <constraint firstItem="chY-fu-hyt" firstAttribute="top" secondItem="55W-Yb-vIA" secondAttribute="top" constant="8" id="Jvt-R7-Jdo"/>
+                                    <constraint firstItem="chY-fu-hyt" firstAttribute="leading" secondItem="55W-Yb-vIA" secondAttribute="leading" constant="8" id="akw-O5-7tr"/>
+                                    <constraint firstAttribute="height" constant="50" id="bwW-1n-m9z"/>
+                                    <constraint firstItem="nR6-ev-A5c" firstAttribute="top" secondItem="55W-Yb-vIA" secondAttribute="top" constant="10" id="iYm-o1-LJB"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" systemColor="systemBackgroundColor" cocoaTouchSystemColor="whiteColor"/>
                         <constraints>
                             <constraint firstItem="4wm-Ly-lHo" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="20" id="1Wz-Kg-xg2"/>
-                            <constraint firstItem="55W-Yb-vIA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="4iv-tO-3DD"/>
                             <constraint firstItem="fVf-3h-udl" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="NsC-yY-pfc"/>
                             <constraint firstItem="fVf-3h-udl" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="OXW-yV-J2q"/>
                             <constraint firstItem="98p-3Z-HN7" firstAttribute="top" secondItem="4wm-Ly-lHo" secondAttribute="bottom" constant="20" id="WF0-rd-ogO"/>
                             <constraint firstItem="4wm-Ly-lHo" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="YFM-Qz-ZSS"/>
-                            <constraint firstItem="fVf-3h-udl" firstAttribute="top" secondItem="55W-Yb-vIA" secondAttribute="bottom" id="bnq-Dj-8hG"/>
-                            <constraint firstItem="55W-Yb-vIA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="ePp-fB-o0l"/>
+                            <constraint firstAttribute="bottom" secondItem="55W-Yb-vIA" secondAttribute="bottom" id="fIU-dF-8d9"/>
                             <constraint firstItem="fVf-3h-udl" firstAttribute="top" secondItem="T8U-8o-FcX" secondAttribute="bottom" constant="20" id="fso-xp-Noe"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="98p-3Z-HN7" secondAttribute="trailing" constant="20" id="gTE-iP-NZh"/>
                             <constraint firstItem="fVf-3h-udl" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="hBN-ch-uAF"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="4wm-Ly-lHo" secondAttribute="trailing" constant="20" id="if4-O4-q6P"/>
+                            <constraint firstItem="55W-Yb-vIA" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="j8t-es-Ye4"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="T8U-8o-FcX" secondAttribute="trailing" constant="20" id="kiv-mm-RS4"/>
+                            <constraint firstItem="55W-Yb-vIA" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="oWA-O0-LPg"/>
                             <constraint firstItem="T8U-8o-FcX" firstAttribute="top" secondItem="4wm-Ly-lHo" secondAttribute="bottom" constant="20" id="ob3-hS-SFn"/>
                             <constraint firstItem="fVf-3h-udl" firstAttribute="top" secondItem="98p-3Z-HN7" secondAttribute="bottom" constant="20" id="t1U-P6-ChY"/>
                             <constraint firstItem="98p-3Z-HN7" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="20" id="uez-hW-XpH"/>
@@ -263,7 +263,7 @@
                     </view>
                     <navigationItem key="navigationItem" title="Dictado" id="U2v-C1-EUM"/>
                     <connections>
-                        <outlet property="correctedWordHeightConstraint" destination="URl-kv-Fy3" id="To2-Hi-IWp"/>
+                        <outlet property="correctedWordHeightConstraint" destination="bwW-1n-m9z" id="UT4-qf-O1p"/>
                         <outlet property="correctedWordTextField" destination="chY-fu-hyt" id="ptd-IV-Rz8"/>
                         <outlet property="correctedWordUIView" destination="55W-Yb-vIA" id="X4t-Vc-RMb"/>
                         <outlet property="dictadoTextView" destination="98p-3Z-HN7" id="NCV-tA-MY8"/>
