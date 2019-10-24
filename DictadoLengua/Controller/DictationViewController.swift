@@ -34,6 +34,10 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
     var gjDictation     = false
     var hDictation      = false
     
+    private var selectedWordRange = UITextRange()
+    
+    private var modifiedDictation = ""
+    
     //------------------------------------------------------
     // MARK: - View did load
 
@@ -55,6 +59,7 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
         
         // generates dictation
         let dictation = writeDictation(from: originalText)
+        modifiedDictation = dictation
         
         // shows dictation on textview
         dictadoTextView.attributedText = formatDictado(dictation)
@@ -96,44 +101,103 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
             dictation = removeAcent(from: originalText)
         }
         
-        //let dictadoWithoutAccent = removeAcent(from: originalText)
-        
         if bvDictation {
             dictation = randomBV(in: dictation)
         }
-        //let dictadoWithoutAccentWithRandomBV = randomBV(in: dictadoWithoutAccent)
         
+        if gjDictation {
+            dictation = randomGJ(in: dictation)
+        }
+        
+        if hDictation {
+            dictation = randomH(in: dictation)
+        }
+        if llyDictation {
+            dictation = randomLlY(in: dictation)
+        }
         return dictation
     }
     
-    // returns a dictado without accents
+    // returns a dictado without accent marks
     func removeAcent(from dictado : String) -> String {
         return  dictado.folding(options: .diacriticInsensitive, locale: .current)
     }
     
-    // returns a dictado without "b" and "v" added randomly
+    // returns a dictado with "b" and "v" used randomly
     func randomBV(in dictado : String) -> String {
         
         var result = ""
         
         for char in dictado {
             if char == "b" || char == "v" {
-                
-               if Bool.random() {
-                    result.append("b")
+                Bool.random() ? result.append("b") : result.append("v")
+            }
+            else {
+                result.append(char)
+            }
+        }
+        return  result
+    }
+    
+    // returns a dictado with "g" and "j" used randomly
+    // The string "gu" is not changed
+    func randomGJ(in dictado : String) -> String {
+        
+        var result = ""
+        
+        let modDictado = dictado.replacingOccurrences(of: "gu", with: "::")
 
-                } else {
-                     result.append("v")
-                }
-                
+        for char in modDictado {
+            if char == "j" || char == "g" {
+                Bool.random() ? result.append("j") : result.append("g")
             }
             else {
                 result.append(char)
             }
         }
         
+        result = result.replacingOccurrences(of: "::", with: "gu")
+
         return  result
+    }
+    
+    // returns a dictado with "h" used randomly
+    func randomH(in dictado : String) -> String {
         
+        var result = ""
+        
+        for char in dictado {
+            if char == "h" {
+                Bool.random() ? result.append("h") : result.append("")
+            }
+            else {
+                result.append(char)
+            }
+        }
+        return  result
+    }
+    
+    // returns a dictado with "Ll" and "Y" used randomly
+    // When "y" is alone is not replaced
+    func randomLlY(in dictado : String) -> String {
+        
+        var result = ""
+        
+        var modDictado = dictado.replacingOccurrences(of: "ll", with: "`")
+        modDictado = modDictado.replacingOccurrences(of: " y ", with: ":::")
+
+        for char in modDictado {
+            if char == "`" || char == "y" {
+                Bool.random() ? result.append("ll") : result.append("y")
+            }
+            else {
+                result.append(char)
+            }
+        }
+        
+        result = result.replacingOccurrences(of: ":::", with: " y ")
+
+        return  result
     }
     
     //------------------------------------------------------
@@ -154,14 +218,31 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
     
     // gets the word closest to user tapped point
     private func getWordAtPosition(_ point: CGPoint) -> String? {
+
         if let textPosition = dictadoTextView.closestPosition(to: point) {
             if let range = dictadoTextView.tokenizer.rangeEnclosingPosition(textPosition, with: .word, inDirection: UITextDirection(rawValue: 1)) {
-                return dictadoTextView.text(in: range)
+                selectedWordRange = range
+                return dictadoTextView.text(in: selectedWordRange)
             }
         }
         return nil
     }
     
+    //------------------------------------------------------
+    //MARK:- setWordAtRange
+    
+    private func setWordAtRange(with word:String, in range: UITextRange){
+        
+        let startIndex :Int = dictadoTextView.offset(from: dictadoTextView.beginningOfDocument, to: range.start)
+        let endIndex   :Int = dictadoTextView.offset(from: dictadoTextView.beginningOfDocument, to: range.end)
+        
+        let startRange = modifiedDictation.index(modifiedDictation.startIndex, offsetBy: startIndex)
+        let endRange = modifiedDictation.index(modifiedDictation.startIndex, offsetBy: endIndex)
+        
+        let range = startRange..<endRange
+        dictadoTextView.text = modifiedDictation.replacingCharacters(in: range, with: word)
+    }
+        
     //------------------------------------------------------
     //MARK:- keyboard will change frame notification
     
@@ -200,11 +281,21 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        
+        if let modifiedWord = textField.text {
+            setWordAtRange(with: modifiedWord, in: selectedWordRange)
+        }
+        
         dismissKeyboard()
         return true
     }
     
     @IBAction func okButtonPressed(_ sender: UIButton) {
+        
+        if let modifiedWord = correctedWordTextField.text {
+            setWordAtRange(with: modifiedWord, in: selectedWordRange)
+        }
+        
         AudioServicesPlaySystemSound(1156)
         dismissKeyboard()
     }
