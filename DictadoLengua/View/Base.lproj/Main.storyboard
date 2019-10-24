@@ -64,35 +64,35 @@
                                                     <preferredSymbolConfiguration key="preferredSymbolConfiguration" scale="default"/>
                                                 </state>
                                                 <connections>
-                                                    <action selector="bvButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="fz2-kL-esh"/>
+                                                    <action selector="dictationOptionButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="cDu-JV-oW8"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iZc-Hc-LHS" userLabel="LLYButton">
                                                 <rect key="frame" x="79.5" y="0.0" width="79.5" height="100"/>
                                                 <state key="normal" title="LL / Y"/>
                                                 <connections>
-                                                    <action selector="llyButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="6AV-Ya-ZbX"/>
+                                                    <action selector="dictationOptionButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="mT8-G3-eva"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xea-pa-YP7" userLabel="TildeButton">
                                                 <rect key="frame" x="159" y="0.0" width="80" height="100"/>
                                                 <state key="normal" title="Tilde"/>
                                                 <connections>
-                                                    <action selector="tildeButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="bZI-sd-Yk0"/>
+                                                    <action selector="dictationOptionButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="z6a-KC-cY6"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3cd-ps-jzR" userLabel="GJButton">
                                                 <rect key="frame" x="239" y="0.0" width="79.5" height="100"/>
                                                 <state key="normal" title="G / J"/>
                                                 <connections>
-                                                    <action selector="gjButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="85e-49-vR7"/>
+                                                    <action selector="dictationOptionButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="edT-oF-5Pj"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sGk-XI-6CB" userLabel="HButton">
                                                 <rect key="frame" x="318.5" y="0.0" width="79.5" height="100"/>
                                                 <state key="normal" title="H"/>
                                                 <connections>
-                                                    <action selector="hButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="URK-kI-zxK"/>
+                                                    <action selector="dictationOptionButtonTapped:" destination="1LR-LX-QrW" eventType="touchUpInside" id="xSp-YJ-u8o"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -147,13 +147,6 @@
                         <viewLayoutGuide key="safeArea" id="86d-Ca-kZB"/>
                     </view>
                     <navigationItem key="navigationItem" title="Home" id="Su7-vx-JxI"/>
-                    <connections>
-                        <outlet property="bvButton" destination="nr1-Bg-oaq" id="d3N-SE-1j9"/>
-                        <outlet property="gjButton" destination="3cd-ps-jzR" id="bP6-QA-6JH"/>
-                        <outlet property="hButton" destination="sGk-XI-6CB" id="dVE-lN-KJW"/>
-                        <outlet property="llyButton" destination="iZc-Hc-LHS" id="EUv-3r-0RH"/>
-                        <outlet property="tildeButton" destination="xea-pa-YP7" id="dlp-nH-psq"/>
-                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Nqg-a8-hxW" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>

@@ -9,26 +9,11 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-
-    //------------------------------------------------------
-    // MARK: - Outlet references
-
-    @IBOutlet weak var bvButton:    UIButton!
-    @IBOutlet weak var llyButton:   UIButton!
-    @IBOutlet weak var tildeButton: UIButton!
-    @IBOutlet weak var gjButton:    UIButton!
-    @IBOutlet weak var hButton:     UIButton!
-    
     
     //------------------------------------------------------
     // MARK: - Global variables
 
-    private var tildeDictation  = false
-    private var bvDictation     = false
-    private var llyDictation    = false
-    private var gjDictation     = false
-    private var hDictation      = false
-    
+    private var dictationOptions = Set<String>()
     
     //------------------------------------------------------
     // MARK: - View did load
@@ -45,13 +30,7 @@ class HomeViewController: UIViewController {
         if segue.identifier == "homeToDictationSegue" {
             
             let destinationVC = segue.destination as! DictationViewController
-            
-            destinationVC.tildeDictation    = tildeDictation
-            destinationVC.bvDictation       = bvDictation
-            destinationVC.llyDictation      = llyDictation
-            destinationVC.gjDictation       = gjDictation
-            destinationVC.hDictation        = hDictation
-                        
+            destinationVC.dictationOptions  = dictationOptions
         }
     }
     
@@ -64,49 +43,21 @@ class HomeViewController: UIViewController {
     @IBAction func folderButtonTapped(_ sender: UIButton) {
     }
     
-    
     //------------------------------------------------------
     // MARK: - Dictation options button action
 
-    @IBAction func bvButtonTapped(_ sender: UIButton) {
-        
-        bvDictation = !bvDictation
-        
-        let titleColor = bvDictation ? UIColor.red : UIColor.blue
-        bvButton.setTitleColor(titleColor, for: .normal)
+    @IBAction func dictationOptionButtonTapped(_ sender: UIButton) {
+
+        sender.isSelected = !sender.isSelected
+
+        if let buttonText = sender.titleLabel?.text {
+           
+            if sender.isSelected {
+                dictationOptions.insert(buttonText)
+                
+            } else {
+                dictationOptions.remove(buttonText)
+            }
+        }
     }
-    
-    @IBAction func llyButtonTapped(_ sender: UIButton) {
-        
-        llyDictation = !llyDictation
-        
-        let titleColor = llyDictation ? UIColor.red : UIColor.blue
-        llyButton.setTitleColor(titleColor, for: .normal)
-    }
-    
-    @IBAction func tildeButtonTapped(_ sender: UIButton) {
-        
-        tildeDictation = !tildeDictation
-        
-        let titleColor = tildeDictation ? UIColor.red : UIColor.blue
-        tildeButton.setTitleColor(titleColor, for: .normal)
-    }
-    
-    @IBAction func gjButtonTapped(_ sender: UIButton) {
-       
-        gjDictation = !gjDictation
-        
-        let titleColor = gjDictation ? UIColor.red : UIColor.blue
-        gjButton.setTitleColor(titleColor, for: .normal)
-    }
-    
-    
-    @IBAction func hButtonTapped(_ sender: UIButton) {
-        
-        hDictation = !hDictation
-        
-        let titleColor = hDictation ? UIColor.red : UIColor.blue
-        hButton.setTitleColor(titleColor, for: .normal)
-    }
-    
 }
