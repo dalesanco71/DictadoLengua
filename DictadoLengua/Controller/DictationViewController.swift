@@ -31,9 +31,9 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
     var dictationOptions = Set<String>()
     
     private var selectedWordRange = UITextRange()
-    
-    private var modifiedDictation = ""
-    
+    private var selectedWord = ""   // global var to check is selected word has changed from dictation (to change the color of the word)
+    private var correctedDictationText = NSMutableAttributedString()
+
     //------------------------------------------------------
     // MARK: - View did load
 
@@ -54,11 +54,13 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
         dictadoTextView.addGestureRecognizer(tapGesture)
         
         // generates dictation
-        let dictation = writeDictation(from: originalText)
-        modifiedDictation = dictation
+        let dictationText       = writeDictation(from: originalText)
+
+        // initializes correctedDictationText as attributed text with format
+        correctedDictationText = formatDictado(dictationText)
         
         // shows dictation on textview
-        dictadoTextView.attributedText = formatDictado(dictation)
+        dictadoTextView.attributedText = formatDictado(dictationText)
         dictadoTextView.isEditable      = false
         dictadoTextView.isSelectable    = false
     }
@@ -73,28 +75,28 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
 
     //------------------------------------------------------
     // Gives format to dictado
-    func formatDictado(_ dictado: String) -> NSAttributedString {
+    private func formatDictado(_ dictado: String) -> NSMutableAttributedString {
             
         let paragraphStyle = NSMutableParagraphStyle()
         paragraphStyle.lineSpacing = 15
 
-        let attributes: [NSAttributedString.Key: Any] = [
+        let attributes: [NSMutableAttributedString.Key: Any] = [
             .font: UIFont.systemFont(ofSize: 18),
             .paragraphStyle: paragraphStyle
         ]
 
-        return NSAttributedString(string: dictado, attributes: attributes)
+        return NSMutableAttributedString(string: dictado, attributes: attributes)
     }
     
     //------------------------------------------------------
     // MARK: - write dictation with options method
     
-    private func writeDictation(from originalText: String) -> String {
+    private func writeDictation(from text: String) -> String {
         
-        var dictation = originalText
+        var dictation = text
         
         if dictationOptions.contains("Tilde") {
-            dictation = removeAcent(from: originalText)
+            dictation = removeAcent(from: text)
         }
         
         dictation = addRandomErrors(in: dictation, with: dictationOptions)
@@ -103,12 +105,12 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
     }
     
     // returns a dictado without accent marks
-    func removeAcent(from dictado : String) -> String {
+    private func removeAcent(from dictado : String) -> String {
         return  dictado.folding(options: .diacriticInsensitive, locale: .current)
     }
     
     // adds random errors to dictation according to selected options
-    func addRandomErrors(in dictado: String, with dictationOptions: Set<String>) -> String{
+    private func addRandomErrors(in dictado: String, with dictationOptions: Set<String>) -> String{
         
         var result = ""
         
@@ -156,8 +158,9 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
         correctedWordTextField.becomeFirstResponder()
         
         let point = tapGesture.location(in: dictadoTextView)
-        if let detectedWord = getWordAtPosition(point) {
-            correctedWordTextField.text = detectedWord
+        if let getWord = getWordAtPosition(point) {
+            selectedWord = getWord
+            correctedWordTextField.text = selectedWord
         }
     }
     
@@ -176,7 +179,7 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
     //------------------------------------------------------
     //MARK:- keyboard will change frame notification
     
-    @objc func keyboardNotification(notification: NSNotification) {
+    @objc private func keyboardNotification(notification: NSNotification) {
 
         if let userInfo = notification.userInfo {
             if let keyboardSize = (userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue{
@@ -205,7 +208,11 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         
         if let modifiedWord = textField.text {
-            setWordAtRange(with: modifiedWord, in: selectedWordRange)
+            
+            // is selected word has been modified change it on the dictation
+            if !(modifiedWord == selectedWord) {
+                setWordAtRange(with: modifiedWord, in: selectedWordRange)
+            }
         }
         
         dismissKeyboard()
@@ -215,7 +222,11 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
     @IBAction func okButtonPressed(_ sender: UIButton) {
         
         if let modifiedWord = correctedWordTextField.text {
-            setWordAtRange(with: modifiedWord, in: selectedWordRange)
+            
+            // is selected word has been modified change it on the dictation
+            if !(modifiedWord == selectedWord) {
+                setWordAtRange(with: modifiedWord, in: selectedWordRange)
+            }
         }
         
         AudioServicesPlaySystemSound(1156)
@@ -235,12 +246,15 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
         
         let startIndexInt   = dictadoTextView.offset(from: dictadoTextView.beginningOfDocument, to: range.start)
         let endIndexInt     = dictadoTextView.offset(from: dictadoTextView.beginningOfDocument, to: range.end)
-        
-        let startIndex      = modifiedDictation.index(modifiedDictation.startIndex, offsetBy: startIndexInt)
-        let endIndex        = modifiedDictation.index(modifiedDictation.endIndex, offsetBy: endIndexInt)
 
-        let range = startIndex..<endIndex
-        dictadoTextView.text = modifiedDictation.replacingCharacters(in: range, with: word)
+        let range = NSRange(location: startIndexInt, length: endIndexInt - startIndexInt)
+        
+        correctedDictationText.mutableString.replaceCharacters(in: range, with: word)
+           
+        correctedDictationText.addAttribute(.foregroundColor, value: UIColor.orange, range: range)
+
+        dictadoTextView.attributedText = correctedDictationText
+
     }
 }
 
