@@ -209,8 +209,8 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
         
         if let modifiedWord = textField.text {
             
-            // is selected word has been modified change it on the dictation
-            if !(modifiedWord == selectedWord) {
+            // is selected word has been modified change it on the dictation and it's not empty
+            if !(modifiedWord == selectedWord) && (!modifiedWord.isEmpty){
                 setWordAtRange(with: modifiedWord, in: selectedWordRange)
             }
         }
@@ -223,8 +223,8 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
         
         if let modifiedWord = correctedWordTextField.text {
             
-            // is selected word has been modified change it on the dictation
-            if !(modifiedWord == selectedWord) {
+            // is selected word has been modified change it on the dictation and it's not empty
+            if !(modifiedWord == selectedWord) && (!modifiedWord.isEmpty){
                 setWordAtRange(with: modifiedWord, in: selectedWordRange)
             }
         }
@@ -247,14 +247,29 @@ class DictationViewController: UIViewController, UITextFieldDelegate {
         let startIndexInt   = dictadoTextView.offset(from: dictadoTextView.beginningOfDocument, to: range.start)
         let endIndexInt     = dictadoTextView.offset(from: dictadoTextView.beginningOfDocument, to: range.end)
 
-        let range = NSRange(location: startIndexInt, length: endIndexInt - startIndexInt)
+        var range = NSRange(location: startIndexInt, length: endIndexInt - startIndexInt)
         
         correctedDictationText.mutableString.replaceCharacters(in: range, with: word)
            
+        range = NSRange(location: startIndexInt, length: word.count)
+
         correctedDictationText.addAttribute(.foregroundColor, value: UIColor.orange, range: range)
 
         dictadoTextView.attributedText = correctedDictationText
 
+    }
+    
+    //------------------------------------------------------
+    // MARK: - Prepare for segue
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.identifier == "dictationToResultSegue" {
+            
+            let destinationVC = segue.destination as! ResultViewController
+            destinationVC.originalText  = originalText
+            destinationVC.correctedDictationText = correctedDictationText.string
+        }
     }
 }
 
